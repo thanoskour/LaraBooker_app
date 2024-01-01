@@ -26,6 +26,7 @@
                 <th scope="col">User Email</th> 
                 <th scope="col">Date</th>
                 <th scope="col">Options</th>
+                <th scope="col">Document</th>
             </tr>
         </thead>
         <tbody>
@@ -42,6 +43,13 @@
                         @method('DELETE')
                         <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure?')">Delete</button>
                     </form>
+                </td>
+                <td>
+                @if($appointment->document_path)
+                    <a href="{{ Storage::url($appointment->document_path) }}" target="_blank">View Document</a>
+                @else
+                    No Document
+                @endif
                 </td>
             </tr>
             @endforeach

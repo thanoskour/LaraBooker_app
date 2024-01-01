@@ -6,6 +6,7 @@ use App\Models\Appointment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 
 class AppointmentController extends Controller
@@ -27,6 +28,7 @@ class AppointmentController extends Controller
         $request->validate([
             'user_email' => 'required|email',
             'date' => 'required|date|after:now|unique:appointments,date',
+            'document' => 'nullable|file|max:2048',
         ]);
 
         $appointmentDate = Carbon::parse($request->date);
@@ -47,6 +49,12 @@ class AppointmentController extends Controller
         $appointment->user_id = Auth::id();
         $appointment->user_email = $request->user_email;
         $appointment->date = $request->date;
+
+        if ($request->hasFile('document') && $request->file('document')->isValid()) {
+            $filePath = $request->file('document')->store('documents', 'public');
+            $appointment->document_path = $filePath;
+        }
+
         $appointment->save();
 
         return redirect()->route('appointments.index')
