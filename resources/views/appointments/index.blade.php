@@ -23,8 +23,9 @@
         <thead>
             <tr>
                 <th scope="col">Appointment ID</th>
+                <th scope="col">User Email</th> 
                 <th scope="col">Date</th>
-                <th scope="col">Actions</th>
+                <th scope="col">Options</th>
             </tr>
         </thead>
         <tbody>
@@ -32,6 +33,7 @@
             @foreach($appointments as $appointment)
             <tr>
                 <td>{{ $appointment->user_id }}</td>
+                <td>{{ $appointment->user_email }}</td>
                 <td>{{ $appointment->date }}</td>
                 <td>
                     <a href="{{ route('appointments.edit', $appointment->id) }}" class="btn btn-secondary">Edit</a>

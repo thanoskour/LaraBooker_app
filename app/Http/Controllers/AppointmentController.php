@@ -5,12 +5,15 @@ namespace App\Http\Controllers;
 use App\Models\Appointment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class AppointmentController extends Controller
 {
     public function index()
     {
-        $appointments = Appointment::all();
+        $userId = Auth::id(); // Get the currently logged-in user's ID
+        $appointments = Appointment::where('user_id', $userId)->get();
         return view('appointments.index', compact('appointments'));
     }
 
@@ -22,11 +25,27 @@ class AppointmentController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'user_email' => 'required|email',
             'date' => 'required|date|after:now|unique:appointments,date',
         ]);
 
+        $appointmentDate = Carbon::parse($request->date);
+        $appointmentEnd = $appointmentDate->copy()->addHour();
+
+        // Check for overlap
+        $overlap = Appointment::where(function ($query) use ($appointmentDate, $appointmentEnd) {
+            $query->whereBetween('date', [$appointmentDate, $appointmentEnd])
+                ->orWhereBetween(DB::raw('DATE_ADD(date, INTERVAL 1 HOUR)'), [$appointmentDate, $appointmentEnd]);
+        })->exists();
+
+        if ($overlap) {
+            return back()->withErrors(['time_slot_taken' => 'The selected time slot is already taken. Please choose a different time.'])->withInput();
+
+        }
+
         $appointment = new Appointment();
         $appointment->user_id = Auth::id();
+        $appointment->user_email = $request->user_email;
         $appointment->date = $request->date;
         $appointment->save();
 
@@ -44,9 +63,26 @@ class AppointmentController extends Controller
     public function update(Request $request, Appointment $appointment)
     {
         $request->validate([
+            'user_email' => 'sometimes|email|nullable',
             'date' => 'required|date|after:now|unique:appointments,date,' . $appointment->id,
         ]);
 
+        $appointmentDate = Carbon::parse($request->date);
+        $appointmentEnd = $appointmentDate->copy()->addHour();
+
+        // Check for overlap, excluding the current appointment
+        $overlap = Appointment::where('id', '!=', $appointment->id)
+            ->where(function ($query) use ($appointmentDate, $appointmentEnd) {
+                $query->whereBetween('date', [$appointmentDate, $appointmentEnd])
+                    ->orWhereBetween(DB::raw('DATE_ADD(date, INTERVAL 1 HOUR)'), [$appointmentDate, $appointmentEnd]);
+            })->exists();
+
+        if ($overlap) {
+            return back()->withErrors(['time_slot_taken' => 'The selected time slot is already taken. Please choose a different time.'])->withInput();
+
+        }
+
+        $appointment->user_email = $request->user_email;
         $appointment->date = $request->date;
         $appointment->save();
 
