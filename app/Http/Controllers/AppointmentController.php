@@ -106,5 +106,18 @@ class AppointmentController extends Controller
         return redirect()->route('appointments.index')
                          ->with('success', 'Appointment deleted successfully.');
     }
+
+    public function getAppointments()
+    {
+        $startOfWeek = Carbon::now()->startOfWeek()->format('Y-m-d H:i:s');
+        $endOfWeek = Carbon::now()->endOfWeek()->format('Y-m-d H:i:s');
+        $appointments = Appointment::whereBetween('date', [$startOfWeek,$endOfWeek])->get();
+        return response()->json($appointments->map(function ($appointment) {
+            return [
+                'title' => 'Occupied', 
+                'start' => $appointment->date,
+            ];
+        }));
+    }
 }
 

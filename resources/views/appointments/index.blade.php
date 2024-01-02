@@ -5,13 +5,6 @@
 <div class="container">
     <h1>Appointments</h1>
 
-    <!-- Logout Button -->
-    <form method="POST" action="{{ route('logout') }}" style="float: right;">
-        @csrf
-        <button type="submit" class="btn btn-danger">Logout</button>
-    </form>
-    
-
     <a href="{{ route('appointments.create') }}" class="btn btn-primary">Create New Appointment</a>
     <br><br>
     @if(session('success'))

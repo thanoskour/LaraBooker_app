@@ -26,9 +26,9 @@ Route::get('/', function () {
         'phpVersion' => PHP_VERSION,
     ]);
 });
-
-
-
+Route::get('/dashboard', function () {
+    return Inertia::render('Dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
 
 Route::get('/', function () {
@@ -53,5 +53,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/appointments/{appointment}', [AppointmentController::class, 'edit'])->name('appointments.edit');
     Route::patch('/appointments/{appointment}', [AppointmentController::class, 'update'])->name('appointments.update');
     Route::delete('/appointments/{appointment}', [AppointmentController::class, 'destroy'])->name('appointments.destroy');
+    Route::get('/api/appointments', [AppointmentController::class, 'getAppointments']);
 });
 require __DIR__.'/auth.php';
