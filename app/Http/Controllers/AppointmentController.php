@@ -32,9 +32,9 @@ class AppointmentController extends Controller
         ]);
 
         $appointmentDate = Carbon::parse($request->date);
-        $appointmentEnd = $appointmentDate->copy()->addHour();
+        $appointmentEnd = $appointmentDate->copy()->addHour(); //this is the end time of the appointmentDate which is one hour after the date we request
 
-        // Check for overlap
+        // Check for overlap in order to see if a time slot is taken
         $overlap = Appointment::where(function ($query) use ($appointmentDate, $appointmentEnd) {
             $query->whereBetween('date', [$appointmentDate, $appointmentEnd])
                 ->orWhereBetween(DB::raw('DATE_ADD(date, INTERVAL 1 HOUR)'), [$appointmentDate, $appointmentEnd]);
@@ -107,6 +107,7 @@ class AppointmentController extends Controller
                          ->with('success', 'Appointment deleted successfully.');
     }
 
+    //This function shows us the Occupied Appointments in the FullCalendar
     public function getAppointments()
     {
         $startOfWeek = Carbon::now()->startOfWeek()->format('Y-m-d H:i:s');

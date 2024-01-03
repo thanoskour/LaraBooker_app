@@ -14,6 +14,6 @@ class AppointmentsTableSeeder extends Seeder
      */
     public function run(): void
     {
-        Appointment::factory(10)->create();
+        Appointment::factory(10)->create(); //Create 10 appointments using database seeds
     }
 }

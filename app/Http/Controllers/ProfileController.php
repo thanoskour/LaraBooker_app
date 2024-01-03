@@ -60,6 +60,9 @@ class ProfileController extends Controller
 
         return Redirect::to('/');
     }
+    /**
+     * Function so that the user can logout
+     */
     public function logout(Request $request)
     {
         Auth::logout();
@@ -67,6 +70,6 @@ class ProfileController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect('/'); // Or redirect to any other page you prefer
+        return redirect('/'); // Redirect to the '/'(register page) when the users clicks log out 
     }
 }

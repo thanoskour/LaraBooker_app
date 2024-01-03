@@ -16,12 +16,15 @@
         @csrf
         @method('PATCH')
         <div class="form-group">
+            
             <label for="date">Appointment Date and Time:</label>
             <input type="datetime-local" class="form-control" id="date" name="date" 
-       value="{{ \Carbon\Carbon::parse($appointment->date)->format('Y-m-d\TH:i') }}" required>
+            value="{{ \Carbon\Carbon::parse($appointment->date)->format('Y-m-d\TH:i') }}" required>
+            
             <label for="user_email">User Email:</label>
             <input type="email" class="form-control" id="user_email" name="user_email" 
             value="{{ old('user_email', $appointment->user_email ?? Auth::user()->email) }}">
+        
         </div>
         <button type="submit" class="btn btn-primary">Update Appointment</button>
     </form>

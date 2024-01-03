@@ -26,16 +26,15 @@ Route::get('/', function () {
         'phpVersion' => PHP_VERSION,
     ]);
 });
+//Dashboard Route that uses Inertia.js and ensures that only authenticated users can access it
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-
+//Route that redirects visitors to the register page
 Route::get('/', function () {
-    return redirect()->route('login');
+    return redirect()->route('register');
 });
-
-Auth::routes();
 
 Route::middleware('auth')->group(function () {
     // Profile routes
@@ -55,4 +54,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/appointments/{appointment}', [AppointmentController::class, 'destroy'])->name('appointments.destroy');
     Route::get('/api/appointments', [AppointmentController::class, 'getAppointments']);
 });
+
+Auth::routes();
 require __DIR__.'/auth.php';

@@ -28,7 +28,6 @@ class AppointmentFactory extends Factory
             'user_id' => User::inRandomOrder()->first()->id ?? User::factory(), // This will create a User for each Appointment
             'date' => $this->faker->dateTimeBetween('+1 week', '+1 month'),
             'user_email' => $this->faker->email,
-            // Add other fields as necessary
         ];
     }
 }
