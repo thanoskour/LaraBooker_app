@@ -3,10 +3,10 @@
 "LaraBooker" is a sophisticated appointment booking system developed with the Laravel framework. This project, crafted as a comprehensive coding task, now encompasses a range of features, including an interactive dashboard for user account management and dynamic appointment scheduling.
 
 ## Features
-Enhanced User Authentication: Robust registration, login, logout, and password reset functionalities.
-User Dashboard: A feature-rich dashboard for users to update their password, delete their account, and manage personal settings.
-Dynamic Appointment Management: Users can create, list, update, and delete appointments, with additional functionalities like reminders, calendar integration, etc.
-Responsive Design: Accessible and user-friendly interface on various devices and screen sizes.
+- Enhanced User Authentication: Robust registration, login, logout, and password reset functionalities.
+- User Dashboard: A feature-rich dashboard for users to update their password, delete their account, and manage personal settings.
+- Dynamic Appointment Management: Users can create, list, update, and delete appointments, with additional functionalities like reminders, calendar integration, etc.
+- Responsive Design: Accessible and user-friendly interface on various devices and screen sizes.
 
 ## Prerequisites
 
